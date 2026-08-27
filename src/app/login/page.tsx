@@ -10,12 +10,12 @@ export default async function LoginPage() {
 
   return (
     <main className="auth-page">
-      <div className="auth-brand"><span className="auth-brand-left">eAmericanEnglish</span><span>Worker</span></div>
+      <div className="login-brand">eAmericanEnglish Worker</div>
       <section className="login-card">
-        <h1>Welcome to Worker</h1>
-        <p className="subtle">Sign in to access your workspace</p>
+        <h1>Welcome back</h1>
+        <p className="subtle">Sign in to eAmericanEnglish Worker</p>
         <GoogleSignIn />
-        <p className="login-note">Access is limited to approved team members.</p>
+        <p className="login-note">Only approved Google accounts can enter.</p>
       </section>
     </main>
   );

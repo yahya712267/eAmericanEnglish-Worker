@@ -10,13 +10,13 @@ export default async function PendingPage() {
 
   return (
     <main className="auth-page">
-      <div className="auth-brand"><span className="auth-brand-left">eAmericanEnglish</span><span>Worker</span></div>
+      <div className="pending-brand">eAmericanEnglish Worker</div>
       <section className="pending-card">
         <div className="pending-icon">⌛</div>
-        <h1>Approval pending</h1>
-        <p>Your account is waiting for owner approval.</p>
-        <span className="status-pill">Pending</span>
-        <p className="subtle">You’ll be able to enter Worker after the owner approves your access.</p>
+        <h1>Access requested</h1>
+        <p>Your Google account was received.</p>
+        <p>An administrator needs to approve your access before you can enter the workspace.</p>
+        <span className="status-pill">Pending approval</span>
         <SignOutButton />
       </section>
     </main>
