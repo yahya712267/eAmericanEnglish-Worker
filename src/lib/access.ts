@@ -1,6 +1,6 @@
 import type { AccessStatus } from "@/lib/types";
 
-export const OWNER_EMAIL = "ya712267@gmail.com";
+export const OWNER_EMAIL = "yahya@eamericanenglish.com";
 
 export function canEnterWorker(status: AccessStatus | null | undefined) {
   return status === "owner" || status === "approved";
