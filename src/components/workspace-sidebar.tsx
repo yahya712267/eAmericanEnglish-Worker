@@ -54,15 +54,17 @@ export function WorkspaceSidebar({
           <div className="product-list">
             {productEntries.map((product) => {
               const implemented = product === "Video Generator";
+              const active = activeProduct === product;
               return (
                 <button
-                  className={`product-entry ${activeProduct === product ? "active" : ""}`}
+                  className="product-entry"
                   key={product}
                   title={implemented ? product : "Coming in a future milestone"}
                   onClick={() => openProduct(product)}
                   disabled={!implemented}
+                  style={active ? { background: "#151e29", color: "#f5f7fa", fontWeight: 650 } : undefined}
                 >
-                  <span className="product-dot" />{product}
+                  <span className="product-dot" style={active ? { background: "#4f8cff" } : undefined} />{product}
                 </button>
               );
             })}
