@@ -16,6 +16,7 @@ export type VideoGenerationJob = {
   status: "queued" | "running" | "succeeded" | "failed";
   provider: string;
   outputUrl?: string;
+  executionTimeMs?: number;
   error?: string;
 };
 
