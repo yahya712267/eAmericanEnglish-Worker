@@ -1,0 +1,281 @@
+.page {
+  margin-left: 272px;
+  min-height: 100vh;
+  padding: 108px 72px 96px 48px;
+  background: #0b0f14;
+  color: #f5f7fa;
+}
+
+.page h1 {
+  margin: 0 0 46px;
+  font-size: 28px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.card {
+  width: min(1048px, calc(100vw - 392px));
+  padding: 22px 24px 30px;
+  border: 1px solid #223041;
+  border-radius: 14px;
+  background: #111821;
+}
+
+.card + .card,
+.reviewSection {
+  margin-top: 28px;
+}
+
+.card h2,
+.reviewSection h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.fileSlot {
+  display: block;
+}
+
+.fileLabel,
+.controlLabel,
+.promptLabel > span {
+  display: block;
+  margin-bottom: 10px;
+  color: #d7e0ea;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dropZone {
+  position: relative;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 46px;
+  overflow: hidden;
+  border: 1px dashed #334155;
+  border-radius: 12px;
+  background: #0f151d;
+  color: #8fa0b3;
+}
+
+.dropZone strong {
+  max-width: 100%;
+  overflow: hidden;
+  color: #f5f7fa;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropZone span {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.dropZone .browse {
+  color: #4f8cff;
+  font-weight: 600;
+}
+
+.fileInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.controlGroup {
+  margin-top: 26px;
+}
+
+.optionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.option,
+.qualityOption,
+.reviewControls button {
+  min-height: 38px;
+  padding: 0 18px;
+  border: 1px solid #2a394a;
+  border-radius: 10px;
+  background: #0f151d;
+  color: #a8b6c6;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.option {
+  min-width: 138px;
+}
+
+.qualityOption {
+  min-width: 156px;
+  min-height: 40px;
+}
+
+.optionActive {
+  border-color: #4f8cff;
+  background: rgba(79, 140, 255, 0.14);
+  color: #f5f7fa;
+  box-shadow: inset 0 0 0 1px rgba(79, 140, 255, 0.18);
+}
+
+.creativeCard {
+  min-height: 364px;
+  padding-top: 32px;
+}
+
+.promptLabel {
+  display: block;
+  margin-top: 28px;
+}
+
+.promptLabel textarea {
+  width: 100%;
+  min-height: 170px;
+  resize: vertical;
+  padding: 18px 16px;
+  border: 1px solid #2a394a;
+  border-radius: 12px;
+  outline: none;
+  background: #0f151d;
+  color: #f5f7fa;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.promptLabel textarea::placeholder {
+  color: #718398;
+}
+
+.promptLabel textarea:focus {
+  border-color: #4f8cff;
+}
+
+.generateButton {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 20px;
+  border: 1px solid #2d6fe8;
+  border-radius: 10px;
+  background: #2d6fe8;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.generateButton:hover {
+  filter: brightness(1.06);
+}
+
+.notice {
+  margin: 14px 0 0;
+  color: #8fa0b3;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.reviewSection {
+  width: min(1048px, calc(100vw - 392px));
+  min-height: 360px;
+  padding: 20px 24px 28px;
+  border: 1px solid #223041;
+  border-radius: 14px;
+  background: #111821;
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.reviewHeader p {
+  margin: 8px 0 0;
+  color: #718398;
+  font-size: 12px;
+}
+
+.reviewControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviewControls label {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid #223041;
+  border-radius: 8px;
+  color: #718398;
+  font-size: 11px;
+}
+
+.reviewControls button {
+  min-height: 28px;
+  min-width: 158px;
+  padding: 0 12px;
+}
+
+.reviewControls button:disabled,
+.reviewControls input:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.emptyReview {
+  min-height: 250px;
+  display: grid;
+  place-items: center;
+  margin-top: 22px;
+  border: 1px dashed #26364a;
+  border-radius: 12px;
+  color: #60748a;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 1180px) {
+  .page {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+
+  .card,
+  .reviewSection {
+    width: 100%;
+  }
+
+  .inputGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .page {
+    margin-left: 240px;
+  }
+}
