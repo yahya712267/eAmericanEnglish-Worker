@@ -36,7 +36,16 @@ export function WorkspaceSidebar({ current, workspaces, profile }: { current: Wo
         </button>
         {productsOpen && (
           <div className="product-list">
-            {productEntries.map((product) => <button className="product-entry" key={product} title="Coming in a future milestone"><span className="product-dot" />{product}</button>)}
+            {productEntries.map((product) => (
+              <button
+                className="product-entry"
+                key={product}
+                title={product === "Video Generator" ? "Open Video Generator" : "Coming in a future milestone"}
+                onClick={() => { if (product === "Video Generator") router.push(`/workspaces/${current.id}/video-generator`); }}
+              >
+                <span className="product-dot" />{product}
+              </button>
+            ))}
           </div>
         )}
         <div className="workspace-nav-after">
