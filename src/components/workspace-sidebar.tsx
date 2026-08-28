@@ -5,10 +5,26 @@ import { useRouter } from "next/navigation";
 import type { Profile, Workspace } from "@/lib/types";
 import { productEntries } from "@/lib/types";
 
-export function WorkspaceSidebar({ current, workspaces, profile }: { current: Workspace; workspaces: Workspace[]; profile: Profile }) {
+export function WorkspaceSidebar({
+  current,
+  workspaces,
+  profile,
+  activeProduct,
+}: {
+  current: Workspace;
+  workspaces: Workspace[];
+  profile: Profile;
+  activeProduct?: (typeof productEntries)[number];
+}) {
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(true);
   const router = useRouter();
+
+  function openProduct(product: (typeof productEntries)[number]) {
+    if (product === "Video Generator") {
+      router.push(`/workspaces/${current.id}/video-generator`);
+    }
+  }
 
   return (
     <>
@@ -36,7 +52,20 @@ export function WorkspaceSidebar({ current, workspaces, profile }: { current: Wo
         </button>
         {productsOpen && (
           <div className="product-list">
-            {productEntries.map((product) => <button className="product-entry" key={product} title="Coming in a future milestone"><span className="product-dot" />{product}</button>)}
+            {productEntries.map((product) => {
+              const implemented = product === "Video Generator";
+              return (
+                <button
+                  className={`product-entry ${activeProduct === product ? "active" : ""}`}
+                  key={product}
+                  title={implemented ? product : "Coming in a future milestone"}
+                  onClick={() => openProduct(product)}
+                  disabled={!implemented}
+                >
+                  <span className="product-dot" />{product}
+                </button>
+              );
+            })}
           </div>
         )}
         <div className="workspace-nav-after">
