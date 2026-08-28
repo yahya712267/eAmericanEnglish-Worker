@@ -10,14 +10,19 @@ from huggingface_hub import snapshot_download
 
 WAN_ROOT = Path(os.environ.get("WAN22_ROOT", "/opt/Wan2.2"))
 MODEL_ROOT = Path(os.environ.get("MODEL_ROOT", "/runpod-volume/models/Wan2.2-TI2V-5B"))
+CACHED_MODEL_ROOT = Path("/runpod-volume/huggingface-cache/hub/models--Wan-AI--Wan2.2-TI2V-5B/snapshots")
 MAX_RESPONSE_BYTES = 7_000_000
 
 
-def ensure_model() -> None:
+def resolve_model() -> Path:
+    cached_snapshots = sorted(CACHED_MODEL_ROOT.glob("*")) if CACHED_MODEL_ROOT.exists() else []
+    if cached_snapshots:
+        return cached_snapshots[-1]
     if (MODEL_ROOT / "models_t5_umt5-xxl-enc-bf16.pth").exists():
-        return
+        return MODEL_ROOT
     MODEL_ROOT.mkdir(parents=True, exist_ok=True)
     snapshot_download("Wan-AI/Wan2.2-TI2V-5B", local_dir=MODEL_ROOT)
+    return MODEL_ROOT
 
 
 def download_reference(url: str, directory: Path) -> Path:
@@ -48,7 +53,7 @@ def handler(job):
     if frame_count < 25 or frame_count > 121 or (frame_count - 1) % 4:
         return {"error": "frame_count must be 4n+1 between 25 and 121."}
 
-    ensure_model()
+    model_root = resolve_model()
     runpod.serverless.progress_update(job, "Wan2.2 model is ready; generation started.")
 
     with tempfile.TemporaryDirectory() as temp_dir_name:
@@ -58,7 +63,7 @@ def handler(job):
             "python", str(WAN_ROOT / "generate.py"),
             "--task", "ti2v-5B",
             "--size", size,
-            "--ckpt_dir", str(MODEL_ROOT),
+            "--ckpt_dir", str(model_root),
             "--offload_model", "True",
             "--convert_model_dtype",
             "--t5_cpu",
