@@ -169,6 +169,7 @@ button { cursor: pointer; }
 .vg-version-status { height: 12px; margin: 6px 0 15px; color: var(--muted); font-size: 9px; }
 .vg-version.current .vg-version-status { color: #6dd7a7; }
 .vg-player { position: relative; width: 100%; height: 162px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 8px; background: #080d14; color: var(--text); overflow: hidden; }
+.vg-version video.vg-player { object-fit: contain; }
 .vg-player::before, .vg-scene-preview i { content: ""; position: absolute; inset: 0; opacity: .28; background: linear-gradient(135deg, transparent 20%, #173252 50%, transparent 80%), radial-gradient(circle at 70% 35%, #36546f, transparent 28%); }
 .vg-player span { position: relative; z-index: 1; font-size: 20px; }
 .vg-player i { position: absolute; bottom: 9px; left: 0; right: 0; z-index: 1; color: #8496aa; font-size: 8px; font-style: normal; }

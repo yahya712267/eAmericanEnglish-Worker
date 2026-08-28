@@ -14,6 +14,7 @@ export type DemoScene = {
 export type DemoVersion = {
   id: number;
   scenes: DemoScene[];
+  videoUrl?: string;
 };
 
 const demoTimings = [
@@ -22,9 +23,10 @@ const demoTimings = [
   ["00:12", "00:18"],
 ];
 
-export function createDemoVersion(id = 1): DemoVersion {
+export function createDemoVersion(id = 1, videoUrl?: string): DemoVersion {
   return {
     id,
+    videoUrl,
     scenes: demoTimings.map(([start, end], index) => ({
       id: `v${id}-scene-${index + 1}`,
       number: index + 1,

@@ -70,6 +70,7 @@ function SceneCard({ versionId, scene, onChange, onToggle }: {
 }
 
 export function VideoGenerator() {
+  const [prompt, setPrompt] = useState("");
   const [aspectRatio, setAspectRatio] = useState("16:9 Landscape");
   const [quality, setQuality] = useState("1080p Full HD");
   const [versions, setVersions] = useState<DemoVersion[]>([]);
@@ -78,14 +79,49 @@ export function VideoGenerator() {
   const [playingAll, setPlayingAll] = useState(false);
   const [modal, setModal] = useState<ModalState>(null);
   const [notice, setNotice] = useState("");
+  const [generating, setGenerating] = useState(false);
 
   function updateVersion(versionId: number, update: (version: DemoVersion) => DemoVersion) {
     setVersions((current) => current.map((version) => version.id === versionId ? update(version) : version));
   }
 
-  function generateDemo() {
-    setVersions([createDemoVersion()]);
-    setNotice("Frontend preview created. No AI generation or backend processing has occurred.");
+  async function generateVideo() {
+    if (!prompt.trim() || generating) return;
+    setGenerating(true);
+    setNotice("Submitting the video to the self-hosted Wan2.2 worker…");
+
+    try {
+      const submission = await fetch("/api/video-generation/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt,
+          aspectRatio: aspectRatio.startsWith("9:16") ? "9:16" : aspectRatio.startsWith("4:5") ? "4:5" : aspectRatio.startsWith("1:1") ? "1:1" : aspectRatio === "Custom" ? "custom" : "16:9",
+          durationSeconds: 1,
+        }),
+      });
+      const submitted = await submission.json() as { id?: string; error?: string };
+      if (!submission.ok || !submitted.id) throw new Error(submitted.error ?? "Generation submission failed.");
+
+      for (;;) {
+        await new Promise((resolve) => window.setTimeout(resolve, 2000));
+        const response = await fetch(`/api/video-generation/jobs/${encodeURIComponent(submitted.id)}`, { cache: "no-store" });
+        const job = await response.json() as { status?: string; outputUrl?: string; executionTimeMs?: number; error?: string };
+        if (!response.ok) throw new Error(job.error ?? "Generation status check failed.");
+        if (job.status === "failed") throw new Error(job.error ?? "Wan2.2 generation failed.");
+        if (job.status === "succeeded") {
+          if (!job.outputUrl) throw new Error("Wan2.2 completed without a video artifact.");
+          setVersions([createDemoVersion(1, job.outputUrl)]);
+          setNotice(`Version 1 generated successfully${job.executionTimeMs ? ` in ${(job.executionTimeMs / 1000).toFixed(1)} seconds` : ""}.`);
+          return;
+        }
+        setNotice(job.status === "running" ? "Wan2.2 is generating Version 1…" : "Version 1 is waiting for a GPU worker…");
+      }
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Generation failed.");
+    } finally {
+      setGenerating(false);
+    }
   }
 
   function regenerate(source: DemoVersion) {
@@ -131,9 +167,9 @@ export function VideoGenerator() {
 
       <section className="vg-panel vg-creative">
         <h2>Creative direction</h2>
-        <textarea aria-label="Prompt" placeholder="Describe the video you want. ChatGPT will turn your direction into the generation prompt." />
-        <button className="vg-generate" onClick={generateDemo}>Generate Full Video</button>
-        <p className="vg-demo-disclaimer">Frontend preview only — this does not generate a real AI video.</p>
+        <textarea aria-label="Prompt" value={prompt} onChange={(event) => setPrompt(event.target.value)} placeholder="Describe the video you want. ChatGPT will turn your direction into the generation prompt." />
+        <button className="vg-generate" onClick={generateVideo} disabled={generating || !prompt.trim()}>{generating ? "Generating Version 1…" : "Generate Full Video"}</button>
+        <p className="vg-demo-disclaimer">Generation runs on the self-hosted Wan2.2 worker.</p>
       </section>
 
       {notice && <div className="vg-notice" role="status">{notice}<button onClick={() => setNotice("")} aria-label="Dismiss message">×</button></div>}
@@ -152,7 +188,9 @@ export function VideoGenerator() {
               <article className={`vg-version ${index === versions.length - 1 ? "current" : ""}`} key={version.id}>
                 <h3>Version {version.id}</h3>
                 <p className="vg-version-status">{version.id === 1 ? "Original" : index === versions.length - 1 ? "Current" : "Previous"}</p>
-                <button className={`vg-player ${playingAll ? "playing" : ""}`} aria-label={`${playingAll ? "Pause" : "Play"} Version ${version.id}`} onClick={() => setPlayingAll((value) => !value)}><span>{playingAll ? "Ⅱ" : "▶"}</span><i>Frontend preview</i></button>
+                {version.videoUrl
+                  ? <video className="vg-player" aria-label={`Version ${version.id} video`} src={version.videoUrl} controls preload="metadata" />
+                  : <button className={`vg-player ${playingAll ? "playing" : ""}`} aria-label={`${playingAll ? "Pause" : "Play"} Version ${version.id}`} onClick={() => setPlayingAll((value) => !value)}><span>{playingAll ? "Ⅱ" : "▶"}</span><i>Preview unavailable</i></button>}
                 <div className="vg-timeline"><span /></div><small>00:18 / 00:42</small>
                 <div className="vg-window-row">
                   {[1, 2, 3, 4].map((window) => <button key={window} className={(activeWindows[version.id] ?? 1) === window ? "selected" : ""} onClick={() => setActiveWindows((value) => ({ ...value, [version.id]: window }))}>W{window}</button>)}
