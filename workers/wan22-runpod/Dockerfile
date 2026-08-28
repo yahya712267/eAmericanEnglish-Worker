@@ -14,7 +14,8 @@ RUN git clone https://github.com/Wan-Video/Wan2.2.git ${WAN22_ROOT} \
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel ninja packaging \
     && grep -v -E '^(torch|torchvision|torchaudio|flash_attn)' ${WAN22_ROOT}/requirements.txt > /tmp/wan-requirements.txt \
     && pip install --no-cache-dir -r /tmp/wan-requirements.txt \
-    && pip install --no-cache-dir flash-attn --no-build-isolation
+    && FLASH_ATTENTION_FORCE_BUILD=TRUE MAX_JOBS=4 pip install --no-cache-dir flash-attn --no-build-isolation \
+    && python -c "import torch; import flash_attn"
 
 COPY requirements.txt /tmp/worker-requirements.txt
 RUN pip install --no-cache-dir -r /tmp/worker-requirements.txt
