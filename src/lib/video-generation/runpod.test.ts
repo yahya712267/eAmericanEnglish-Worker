@@ -15,6 +15,17 @@ describe("RunPod Wan provider", () => {
     expect(JSON.stringify(job)).not.toContain("secret");
   });
 
+  it("submits 25 frames for the smallest one-second proof", async () => {
+    let submittedOptions: RequestInit | undefined;
+    const request = vi.fn<typeof fetch>(async (...args) => {
+      submittedOptions = args[1];
+      return new Response(JSON.stringify({ id: "job-min", status: "IN_QUEUE" }), { status: 200 });
+    });
+    const provider = new RunPodWanProvider("endpoint", "secret", request);
+    await provider.submit({ prompt: "A paper airplane", aspectRatio: "16:9", durationSeconds: 1 });
+    expect(JSON.parse(String(submittedOptions?.body)).input.frame_count).toBe(25);
+  });
+
   it("maps a completed base64 result to a playable data URL", async () => {
     const request = vi.fn<typeof fetch>(async () => new Response(JSON.stringify({
       id: "job-2",

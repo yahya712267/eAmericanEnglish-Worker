@@ -19,6 +19,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel ninja packaging \
 
 COPY requirements.txt /tmp/worker-requirements.txt
 RUN pip install --no-cache-dir -r /tmp/worker-requirements.txt
+RUN python -c "import einops; import torch; import flash_attn"
 COPY handler.py /opt/worker/handler.py
 
 WORKDIR /opt/worker

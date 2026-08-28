@@ -14,7 +14,7 @@ export function createGenerationPlan(input: VideoGenerationInput): GenerationPla
   const portrait = input.aspectRatio === "9:16" || input.aspectRatio === "4:5";
   const requestedSeconds = Math.min(Math.max(input.durationSeconds ?? 3, 1), 5);
   const rawFrames = Math.round(requestedSeconds * 24);
-  const frameCount = Math.floor((rawFrames - 1) / 4) * 4 + 1;
+  const frameCount = Math.max(25, Math.floor((rawFrames - 1) / 4) * 4 + 1);
 
   return {
     prompt: `${direction}. Cinematic composition, coherent motion, consistent subjects, natural lighting, high detail.`,
