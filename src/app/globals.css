@@ -116,6 +116,8 @@ button { cursor: pointer; }
 .product-entry + .product-entry { margin-top: 0; }
 .product-entry:first-child .product-dot { background: var(--blue); }
 .product-entry:not(:first-child) .product-dot { background: #405063; }
+.product-entry.active { background: var(--surface); color: var(--text); font-weight: 650; }
+.product-entry:disabled { cursor: default; }
 .workspace-nav-after { margin-top: 10px; }
 .empty-product { position: fixed; inset: 72px 0 0 272px; display: grid; place-items: center; color: rgba(143,160,179,.45); font-size: 14px; font-weight: 500; pointer-events: none; }
 

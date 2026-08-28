@@ -18,7 +18,7 @@ export default async function VideoGeneratorPage({ params }: { params: Promise<{
     <AppShell
       profile={profile}
       active="workspace"
-      sidebarContent={<WorkspaceSidebar current={current as Workspace} workspaces={(workspaces ?? []) as Workspace[]} profile={profile} />}
+      sidebarContent={<WorkspaceSidebar current={current as Workspace} workspaces={(workspaces ?? []) as Workspace[]} profile={profile} activeProduct="Video Generator" />}
     >
       <VideoGenerator />
     </AppShell>

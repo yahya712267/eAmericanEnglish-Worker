@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Profile, Workspace } from "@/lib/types";
 import { productEntries } from "@/lib/types";
 
-export function WorkspaceSidebar({ current, workspaces, profile }: { current: Workspace; workspaces: Workspace[]; profile: Profile }) {
+export function WorkspaceSidebar({ current, workspaces, profile, activeProduct }: { current: Workspace; workspaces: Workspace[]; profile: Profile; activeProduct?: (typeof productEntries)[number] }) {
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(true);
   const router = useRouter();
@@ -38,10 +38,11 @@ export function WorkspaceSidebar({ current, workspaces, profile }: { current: Wo
           <div className="product-list">
             {productEntries.map((product) => (
               <button
-                className="product-entry"
+                className={`product-entry ${activeProduct === product ? "active" : ""}`}
                 key={product}
                 title={product === "Video Generator" ? "Open Video Generator" : "Coming in a future milestone"}
                 onClick={() => { if (product === "Video Generator") router.push(`/workspaces/${current.id}/video-generator`); }}
+                disabled={product !== "Video Generator"}
               >
                 <span className="product-dot" />{product}
               </button>
