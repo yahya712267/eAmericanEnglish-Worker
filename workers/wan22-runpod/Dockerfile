@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel ninja packaging \
 
 COPY requirements.txt /tmp/worker-requirements.txt
 RUN pip install --no-cache-dir -r /tmp/worker-requirements.txt
-RUN cd ${WAN22_ROOT} && python generate.py --help > /dev/null
+RUN python -c "import decord; import einops; import librosa; import peft; import torch; import flash_attn"
 COPY handler.py /opt/worker/handler.py
 
 WORKDIR /opt/worker
